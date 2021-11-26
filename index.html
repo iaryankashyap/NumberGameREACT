@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerical Game</title>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>  
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <style>
+        .incorrect{
+            color: red;
+        }
+        #app{
+            text-align: center;
+        }
+        .container{
+            font-size: 30px;
+            text-align: center;
+            color: green;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-decoration: underline;
+        }
+        h3{
+            color: blue;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container"><p>"NUMBER GAME"</p></div>
+    <div id="app"></div>
+
+
+
+
+    <script type="text/babel">
+
+        class Game extends React.Component{
+            constructor(props){
+                super(props)
+                this.state={
+                    score:0,
+                    num1:1,
+                    num2:1,
+                    response:"",
+                    logic:"true"
+                };
+            }
+
+            render(){
+                if (this.state.logic ==="false") {
+                    return this.renderProblem()
+                }
+                else{
+                    return this.renderWin()
+                }
+            }
+
+            renderProblem(){
+                return (<div>
+                        <h1 className={"incorrect"}> {this.state.num1} + {this.state.num2} </h1>
+                        <input onKeyPress={this.keypress} onChange={this.change} value={this.state.response}/> 
+                        <h3>Score: {this.state.score}</h3>   
+                </div>)
+            }
+            renderWin(){
+                return (<div>
+                        <h1> {this.state.num1} + {this.state.num2} </h1>
+                        <input onKeyPress={this.keypress} onChange={this.change} value={this.state.response}/> 
+                        <h3>Score: {this.state.score}</h3>   
+                </div>)
+            }
+            change = (event) =>{
+                this.setState({
+                    response: event.target.value
+                })
+            }
+            keypress = (event) =>{
+                if (event.key === "Enter") {
+                    const answer = parseInt(this.state.response)
+                    if ((this.state.num1 + this.state.num2) == answer ) {
+                    this.setState({
+                    score: this.state.score + 1,
+                    response: "",
+                    num1 : Math.ceil(Math.random() *10),
+                    num2 : Math.ceil(Math.random()*10),
+                    logic:"true"
+                        })
+                    
+                    }
+                    else{
+                        this.setState({
+                    response: "",
+                    logic:"false"
+                        })
+                    
+                        
+                    }
+                }
+                
+            }
+            
+        }
+
+        class App extends React.Component{
+            render(){
+               return <Game/>
+            }
+        }
+        
+        ReactDOM.render(<App/>,document.querySelector("#app"))
+
+    </script>
+
+
+</body>
+</html>
